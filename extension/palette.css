@@ -1,0 +1,259 @@
+:root {
+  color-scheme: light dark;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --surface: #efefee;
+  --text: #222;
+  --subtle: #929292;
+  --line: #dededc;
+  --selected: #a5a3ce;
+  --selected-text: #fff;
+  --arrow: #e4e4e3;
+  --shadow: 0 24px 60px #0005;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  background: transparent;
+  color: var(--text);
+}
+body {
+  width: 680px;
+  padding: 0;
+}
+body.overlay {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(24px, 25vh, 230px) 20px 24px;
+  background: rgb(0 0 0 / 42%);
+}
+#panel {
+  width: 680px;
+  max-width: 100%;
+  background: var(--surface);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+body:not(.overlay) #panel {
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+}
+.search-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 10px;
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.search-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  stroke: var(--text);
+  stroke-width: 1.8;
+}
+input {
+  font:
+    400 18px/1.65 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  letter-spacing: -0.4px;
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--text);
+  caret-color: #72bfff;
+}
+input::placeholder {
+  color: #777;
+}
+button {
+  font: inherit;
+}
+#results {
+  padding: 6px 8px 9px;
+  max-height: min(400px, calc(75vh - 100px));
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.result[aria-selected="true"] {
+  background: var(--selected);
+  color: var(--selected-text);
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--subtle);
+  flex-shrink: 0;
+}
+.result[aria-selected="true"] .icon {
+  background: var(--surface);
+  color: var(--text);
+}
+.icon img {
+  width: 16px;
+  height: 16px;
+}
+.icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+.text {
+  min-width: 0;
+  flex: 1;
+}
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 450;
+  letter-spacing: -0.15px;
+}
+.badge {
+  font-size: 13px;
+  color: var(--subtle);
+  white-space: nowrap;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin-left: 8px;
+}
+.result[aria-selected="true"] .badge {
+  color: var(--selected-text);
+}
+.enter {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 4px;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1;
+  background: var(--arrow);
+  color: #888;
+}
+.result[aria-selected="true"] .enter {
+  background: #fff;
+  color: var(--selected);
+}
+mark {
+  background: transparent;
+  color: inherit;
+  font-weight: 650;
+}
+#status:empty {
+  display: none;
+}
+#status {
+  font-size: 13px;
+  color: var(--subtle);
+  padding: 16px 22px;
+}
+button:focus-visible {
+  outline: 2px solid var(--selected);
+  outline-offset: 3px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #292929;
+    --text: #eeeeed;
+    --subtle: #929291;
+    --line: #3b3b3a;
+    --selected: #77729d;
+    --arrow: #3a3a39;
+    --shadow: 0 24px 60px #0007;
+  }
+  input::placeholder {
+    color: #aaa;
+  }
+  .enter {
+    color: #aaa;
+  }
+}
+@media (max-width: 480px) {
+  .badge {
+    font-size: 0;
+    gap: 0;
+    margin-left: 2px;
+  }
+  .search-line {
+    padding: 13px 8px;
+  }
+  input {
+    font-size: 17px;
+  }
+  body.overlay {
+    padding: 24px 10px;
+  }
+  .result {
+    padding: 8px 6px;
+  }
+  .title {
+    font-size: 13px;
+  }
+  #results {
+    max-height: calc(100vh - 130px);
+  }
+}
+
+/* Popup viewports size to their content: viewport-relative list heights create a collapse loop. */
+body:not(.overlay) {
+  height: 460px;
+  min-height: 460px;
+  background: var(--surface);
+}
+body:not(.overlay) #panel {
+  height: 460px;
+  display: flex;
+  flex-direction: column;
+}
+body:not(.overlay) .search-line {
+  flex-shrink: 0;
+}
+body:not(.overlay) #results {
+  max-height: none;
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+}
+body:not(.overlay) #status {
+  flex-shrink: 0;
+}

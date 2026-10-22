@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tablight</title>
+    <link rel="stylesheet" href="palette.css" />
+    <script type="module" src="palette.js"></script>
+  </head>
+  <body>
+    <main id="panel" role="dialog" aria-label="Search tabs" aria-modal="true">
+      <div class="search-line">
+        <svg
+          class="search-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m16 16 4 4" /></svg
+        ><input
+          id="query"
+          type="text"
+          placeholder="Search or Enter URL…"
+          autocomplete="off"
+          spellcheck="false"
+          autocapitalize="off"
+          role="combobox"
+          aria-label="Search tabs or enter a URL"
+          aria-autocomplete="list"
+          aria-expanded="true"
+          aria-controls="results"
+        />
+      </div>
+      <div id="results" role="listbox" aria-label="Results"></div>
+      <div id="status" role="status" aria-live="polite"></div>
+    </main>
+  </body>
+</html>

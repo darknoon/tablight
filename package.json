@@ -1,0 +1,19 @@
+{
+  "name": "tablight",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first Arc-style tab command palette",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/search.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "package": "node scripts/package.mjs",
+    "format": "prettier --write src scripts tests extension/*.html extension/*.css extension/manifest.json README.md package.json .github"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1",
+    "prettier": "3.6.2"
+  }
+}
