@@ -1,6 +1,27 @@
 import { makeResults, displayURL, normalize } from "./search.js";
 const overlay = new URL(location.href).searchParams.has("overlay");
 document.body.classList.toggle("overlay", overlay);
+// Keep a hairline at one device pixel through zoom and monitor changes.
+let densityQuery;
+function updateHairline() {
+  densityQuery?.removeEventListener("change", updateHairline);
+  const ratio = window.devicePixelRatio || 1;
+  document.documentElement.style.setProperty("--hairline", `${1 / ratio}px`);
+  densityQuery = matchMedia(`(resolution: ${ratio}dppx)`);
+  densityQuery.addEventListener("change", updateHairline);
+}
+updateHairline();
+if (overlay) {
+  const panel = document.querySelector("#panel");
+  const syncGlass = () => {
+    const { x, y, width, height } = panel.getBoundingClientRect();
+    parent.postMessage({ type: "tablight:panel", x, y, width, height }, "*");
+  };
+  new ResizeObserver(syncGlass).observe(panel);
+  window.addEventListener("resize", syncGlass);
+  syncGlass();
+}
+
 const input = document.querySelector("#query"),
   list = document.querySelector("#results"),
   status = document.querySelector("#status");

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Set up Tablight</title>
+    <link rel="stylesheet" href="setup.css" />
+    <script src="setup.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Set up your shortcut</h1>
+      <p>Open Tablight with a shortcut or its toolbar icon.</p>
+      <p class="current" role="status">
+        Current shortcut: <strong id="shortcut">Checking…</strong>
+      </p>
+      <ol>
+        <li><button id="open">Open keyboard shortcuts</button></li>
+        <li>
+          Find <strong id="name">Tablight</strong>, then click the pencil beside
+          <strong>Activate the extension</strong>.
+        </li>
+        <li>
+          Press <kbd id="suggested">⌘T</kbd>, or choose another shortcut. Keep
+          the scope set to <strong>In Dia</strong> or
+          <strong>In Chrome</strong>, depending on your browser.
+        </li>
+      </ol>
+      <p class="note">
+        ⌘T normally opens a new tab. Assigning it here uses it for Tablight
+        instead. If your browser keeps intercepting it, choose another shortcut.
+      </p>
+      <h2>Try it</h2>
+      <p>
+        Return to a website and press your shortcut. Type to find a tab, use ↑ /
+        ↓ to choose, then Return to switch. With no text, Return switches to
+        your previous tab. Escape closes the picker.
+      </p>
+      <p class="note">
+        Protected browser pages open the picker in a separate window. Web search
+        and Ask ChatGPT send your text only when you select them.
+      </p>
+      <p class="note">
+        You can reopen these instructions from the extension’s Options menu.
+      </p>
+    </main>
+  </body>
+</html>

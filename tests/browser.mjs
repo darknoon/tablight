@@ -128,6 +128,32 @@ try {
     true,
   );
   report("Real extension action opens centered overlay with input focused");
+  for (const ratio of [1, 1.5, 2, 3]) {
+    await cdp.send("Emulation.setDeviceMetricsOverride", {
+      width: 1280,
+      height: 900,
+      deviceScaleFactor: ratio,
+      mobile: false,
+    });
+    await wait(
+      () =>
+        frame.evaluate(
+          () =>
+            Math.abs(
+              parseFloat(
+                getComputedStyle(document.querySelector("#panel"))
+                  .borderTopWidth,
+              ) *
+                devicePixelRatio -
+                1,
+            ) < 0.001,
+        ),
+      "device-pixel hairline",
+    );
+  }
+  await cdp.send("Emulation.clearDeviceMetricsOverride");
+  report("Hairline follows device pixel ratios 1, 1.5, 2 and 3");
+
   await frame.locator("#query").fill("fig");
   assert.match(
     await frame.locator("[aria-selected=true] .title").innerText(),
@@ -537,11 +563,39 @@ try {
     ["_execute_action"],
   );
   assert.equal(
-    await worker.evaluate(() => chrome.runtime.getManifest().options_page),
-    undefined,
+    await worker.evaluate(() => chrome.runtime.getManifest().options_ui.page),
+    "setup.html",
   );
   report(
-    "Only the native extension action is exposed; obsolete setup page removed",
+    "Only the native extension action is exposed; setup is available from Options",
+  );
+  const setup = await context.newPage();
+  await setup.goto(`chrome-extension://${id}/setup.html`);
+  await wait(
+    () =>
+      setup
+        .locator("#shortcut")
+        .innerText()
+        .then((t) => t.includes("T")),
+    "assigned shortcut shown in setup",
+  );
+  assert.match(
+    await setup.locator("main").innerText(),
+    /Activate the extension/,
+  );
+  await setup.locator("#open").click();
+  await wait(
+    () =>
+      Promise.resolve(
+        context
+          .pages()
+          .some((p) => p.url() === "chrome://extensions/shortcuts"),
+      ),
+    "setup opens shortcut editor",
+  );
+  await setup.screenshot({ path: "artifacts/setup.png" });
+  report(
+    "Setup shows the assigned action shortcut and opens the browser shortcut editor",
   );
   await writeFile(
     "artifacts/browser-report.json",

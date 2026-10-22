@@ -83,9 +83,10 @@ chrome.action.onClicked.addListener((tab) =>
   ),
 );
 // Remove the temporary 0.1.4 debugging log and any persisted popup override.
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(({ reason }) => {
   chrome.storage.local.remove("diagnostics");
   chrome.action.setPopup({ popup: "" });
+  if (reason === "install") chrome.runtime.openOptionsPage();
 });
 async function contextFor(sender) {
   if (

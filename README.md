@@ -22,7 +22,7 @@ The default shortcut is ⌘⇧Space on macOS and Ctrl⇧Space elsewhere. Chromiu
 - Shift+Return or ⌘Return forces a new URL or web search. A leading `?` excludes tab matches.
 - Escape dismisses the picker. Clicking outside the in-page overlay also dismisses it.
 
-Normal websites use a centered overlay with a softly blurred, lightly dimmed backdrop and a light panel with a hairline border (dark appearance follows your system). Reduced-transparency preferences disable the blur. Protected pages such as `chrome://extensions` use a small centered window. Selecting a result or pressing Escape closes that window.
+Normal websites use a centered overlay with a frosted panel and a one-device-pixel hairline (dark appearance follows your system). The page outside the panel stays sharp and lightly dimmed. Reduced-transparency preferences disable the panel blur. Protected pages such as `chrome://extensions` use a small centered window. Selecting a result or pressing Escape closes that window.
 
 Results include HTTP, HTTPS and file tabs in the same browser profile and browsing mode. Browser-owned pages, extension pages, Dia chat and placeholder WebUIs are excluded so the picker does not switch into internal browser surfaces. External sites such as ChatGPT are ordinary searchable tabs. Local file overlays require the browser's file-access permission; otherwise the window fallback is used.
 
@@ -58,3 +58,5 @@ npm run package
 `CHROMIUM_PATH=/path/to/chromium npm run test:browser` selects an existing Chromium executable. Each run uses a fresh isolated profile. The suite loads the actual extension, assigns ⌘T in the shortcut editor and invokes the browser's extension-action API. It tests ranking, focus, tab switching, search/ChatGPT handoffs, isolation and the protected-page window. Web and ChatGPT destinations are intercepted fixtures: tests verify the handoff URL, not a live ChatGPT response. Artifacts are written to `artifacts/`.
 
 The suite does not synthesize a physical macOS shortcut. The native extension-action binding was manually confirmed in Dia. Dia's custom command path delivered events without the page access needed for injection, and its programmatic action popup failed; this is why Tablight uses `_execute_action` and a real fallback window.
+
+Setup instructions open on first install and remain available from the extension’s Options menu. Reloads and updates do not reopen them.

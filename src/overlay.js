@@ -12,17 +12,21 @@ export function mountOverlay(url) {
   const root = host.attachShadow({ mode: "closed" });
   const style = document.createElement("style");
   style.textContent = `:host::backdrop{background:transparent}
-    .backdrop{position:absolute;inset:0;background:rgb(30 30 35 / 18%);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);pointer-events:none}
+    .backdrop{position:absolute;inset:0;background:rgb(30 30 35 / 12%);pointer-events:none}
+    .glass{position:absolute;visibility:hidden;border-radius:12px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);pointer-events:none}
     iframe{position:relative;display:block;width:100%;height:100%;border:0;background:transparent;color-scheme:normal}
-    @media(prefers-reduced-transparency:reduce){.backdrop{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgb(30 30 35 / 25%)}}
+    @media(prefers-reduced-transparency:reduce){.glass{backdrop-filter:none;-webkit-backdrop-filter:none}}
     `;
   const backdrop = document.createElement("div");
   backdrop.className = "backdrop";
   backdrop.setAttribute("aria-hidden", "true");
+  const glass = document.createElement("div");
+  glass.className = "glass";
+  glass.setAttribute("aria-hidden", "true");
   const frame = document.createElement("iframe");
   frame.src = url;
   frame.title = "Tablight — search your tabs";
-  root.append(style, backdrop, frame);
+  root.append(style, backdrop, glass, frame);
   const close = () => {
     window.removeEventListener("message", message);
     host.remove();
@@ -31,11 +35,27 @@ export function mountOverlay(url) {
   };
   const message = (event) => {
     if (
-      event.source === frame.contentWindow &&
-      event.origin === new URL(url).origin &&
-      event.data === "tablight:close"
+      event.source !== frame.contentWindow ||
+      event.origin !== new URL(url).origin
     )
-      close();
+      return;
+    if (event.data === "tablight:close") close();
+    if (event.data?.type === "tablight:panel") {
+      const { x, y, width, height } = event.data;
+      if (
+        ![x, y, width, height].every(Number.isFinite) ||
+        width < 0 ||
+        height < 0
+      )
+        return;
+      Object.assign(glass.style, {
+        left: x + "px",
+        top: y + "px",
+        width: width + "px",
+        height: height + "px",
+        visibility: "visible",
+      });
+    }
   };
   globalThis.__tablightClose = close;
   window.addEventListener("message", message);

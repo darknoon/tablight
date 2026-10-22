@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tablight \u2014 jump to a tab",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Type a few letters. Return to your tab. A private, Arc-inspired command palette.",
   "minimum_chrome_version": "127",
   "permissions": [
@@ -35,5 +35,9 @@
   ],
   "content_security_policy": {
     "extension_pages": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+  },
+  "options_ui": {
+    "page": "setup.html",
+    "open_in_tab": true
   }
 }

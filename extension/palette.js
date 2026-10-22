@@ -111,6 +111,25 @@ function makeResults(tabs2, query, context2) {
 // src/palette.js
 var overlay = new URL(location.href).searchParams.has("overlay");
 document.body.classList.toggle("overlay", overlay);
+var densityQuery;
+function updateHairline() {
+  densityQuery?.removeEventListener("change", updateHairline);
+  const ratio = window.devicePixelRatio || 1;
+  document.documentElement.style.setProperty("--hairline", `${1 / ratio}px`);
+  densityQuery = matchMedia(`(resolution: ${ratio}dppx)`);
+  densityQuery.addEventListener("change", updateHairline);
+}
+updateHairline();
+if (overlay) {
+  const panel = document.querySelector("#panel");
+  const syncGlass = () => {
+    const { x, y, width, height } = panel.getBoundingClientRect();
+    parent.postMessage({ type: "tablight:panel", x, y, width, height }, "*");
+  };
+  new ResizeObserver(syncGlass).observe(panel);
+  window.addEventListener("resize", syncGlass);
+  syncGlass();
+}
 var input = document.querySelector("#query");
 var list = document.querySelector("#results");
 var status = document.querySelector("#status");
