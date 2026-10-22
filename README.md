@@ -22,7 +22,7 @@ The default shortcut is ⌘⇧Space on macOS and Ctrl⇧Space elsewhere. Chromiu
 - Shift+Return or ⌘Return forces a new URL or web search. A leading `?` excludes tab matches.
 - Escape dismisses the picker. Clicking outside the in-page overlay also dismisses it.
 
-Normal websites use a centered overlay with a dim backdrop and no blur. Protected pages such as `chrome://extensions` use a small centered window. Selecting a result or pressing Escape closes that window.
+Normal websites use a centered overlay with a softly blurred, lightly dimmed backdrop and a light panel with a hairline border (dark appearance follows your system). Reduced-transparency preferences disable the blur. Protected pages such as `chrome://extensions` use a small centered window. Selecting a result or pressing Escape closes that window.
 
 Results include HTTP, HTTPS and file tabs in the same browser profile and browsing mode. Browser-owned pages, extension pages, Dia chat and placeholder WebUIs are excluded so the picker does not switch into internal browser surfaces. External sites such as ChatGPT are ordinary searchable tabs. Local file overlays require the browser's file-access permission; otherwise the window fallback is used.
 

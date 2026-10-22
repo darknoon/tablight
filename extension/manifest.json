@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tablight \u2014 jump to a tab",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Type a few letters. Return to your tab. A private, Arc-inspired command palette.",
   "minimum_chrome_version": "127",
   "permissions": [

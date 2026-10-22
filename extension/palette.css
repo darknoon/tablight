@@ -1,14 +1,16 @@
 :root {
   color-scheme: light dark;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --surface: #efefee;
+  --surface: #f7f7f8;
+  --panel-surface: rgb(247 247 248 / 97%);
+  --outline: rgb(45 45 55 / 28%);
   --text: #222;
   --subtle: #929292;
   --line: #dededc;
   --selected: #a5a3ce;
   --selected-text: #fff;
   --arrow: #e4e4e3;
-  --shadow: 0 24px 60px #0005;
+  --shadow: 0 24px 64px rgb(0 0 0 / 24%), 0 2px 8px rgb(0 0 0 / 6%);
 }
 * {
   box-sizing: border-box;
@@ -33,13 +35,13 @@ body.overlay {
   align-items: flex-start;
   justify-content: center;
   padding: clamp(24px, 25vh, 230px) 20px 24px;
-  background: rgb(0 0 0 / 42%);
+  background: transparent;
 }
 #panel {
   width: 680px;
   max-width: 100%;
-  background: var(--surface);
-  border: 1px solid rgb(255 255 255 / 20%);
+  background: var(--panel-surface);
+  border: 1px solid var(--outline);
   border-radius: 12px;
   box-shadow: var(--shadow);
   overflow: hidden;
@@ -194,6 +196,8 @@ button:focus-visible {
 @media (prefers-color-scheme: dark) {
   :root {
     --surface: #292929;
+    --panel-surface: rgb(41 41 41 / 97%);
+    --outline: rgb(255 255 255 / 22%);
     --text: #eeeeed;
     --subtle: #929291;
     --line: #3b3b3a;
@@ -256,4 +260,10 @@ body:not(.overlay) #results {
 }
 body:not(.overlay) #status {
   flex-shrink: 0;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  #panel {
+    background: var(--surface);
+  }
 }

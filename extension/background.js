@@ -10,11 +10,18 @@ function mountOverlay(url) {
   host.style.cssText = "all:initial!important;position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;z-index:2147483647!important;";
   const root = host.attachShadow({ mode: "closed" });
   const style = document.createElement("style");
-  style.textContent = ":host::backdrop{background:transparent} iframe{display:block;width:100%;height:100%;border:0;background:transparent;color-scheme:normal}";
+  style.textContent = `:host::backdrop{background:transparent}
+    .backdrop{position:absolute;inset:0;background:rgb(30 30 35 / 18%);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);pointer-events:none}
+    iframe{position:relative;display:block;width:100%;height:100%;border:0;background:transparent;color-scheme:normal}
+    @media(prefers-reduced-transparency:reduce){.backdrop{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgb(30 30 35 / 25%)}}
+    `;
+  const backdrop = document.createElement("div");
+  backdrop.className = "backdrop";
+  backdrop.setAttribute("aria-hidden", "true");
   const frame = document.createElement("iframe");
   frame.src = url;
   frame.title = "Tablight \u2014 search your tabs";
-  root.append(style, frame);
+  root.append(style, backdrop, frame);
   const close = () => {
     window.removeEventListener("message", message);
     host.remove();
