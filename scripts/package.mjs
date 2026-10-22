@@ -12,6 +12,7 @@ const filename = `tablight-${version}.zip`;
 const zip = path.resolve("artifacts", filename);
 await cp("extension", stage, { recursive: true });
 await cp("README.md", path.join(stage, "README.md"));
+await cp("docs", path.join(stage, "docs"), { recursive: true });
 await rm(zip, { force: true });
 execFileSync("/usr/bin/zip", ["-qr", zip, "."], { cwd: stage });
 const hash = createHash("sha256")
