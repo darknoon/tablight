@@ -7,8 +7,8 @@
   --text: #222;
   --subtle: #929292;
   --line: #dededc;
-  --selected: #a5a3ce;
-  --selected-text: #fff;
+  --selected: Highlight;
+  --selected-text: HighlightText;
   --arrow: #e4e4e3;
   --shadow: 0 24px 64px rgb(0 0 0 / 24%), 0 2px 8px rgb(0 0 0 / 6%);
 }
@@ -173,7 +173,7 @@ button {
   color: #888;
 }
 .result[aria-selected="true"] .enter {
-  background: #fff;
+  background: var(--selected-text);
   color: var(--selected);
 }
 mark {
@@ -201,7 +201,6 @@ button:focus-visible {
     --text: #eeeeed;
     --subtle: #929291;
     --line: #3b3b3a;
-    --selected: #77729d;
     --arrow: #3a3a39;
     --shadow: 0 24px 60px #0007;
   }

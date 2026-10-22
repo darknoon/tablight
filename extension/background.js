@@ -11,21 +11,17 @@ function mountOverlay(url) {
   const root = host.attachShadow({ mode: "closed" });
   const style = document.createElement("style");
   style.textContent = `:host::backdrop{background:transparent}
-    .backdrop{position:absolute;inset:0;background:rgb(30 30 35 / 12%);pointer-events:none}
     .glass{position:absolute;visibility:hidden;border-radius:12px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);pointer-events:none}
     iframe{position:relative;display:block;width:100%;height:100%;border:0;background:transparent;color-scheme:normal}
     @media(prefers-reduced-transparency:reduce){.glass{backdrop-filter:none;-webkit-backdrop-filter:none}}
     `;
-  const backdrop = document.createElement("div");
-  backdrop.className = "backdrop";
-  backdrop.setAttribute("aria-hidden", "true");
   const glass = document.createElement("div");
   glass.className = "glass";
   glass.setAttribute("aria-hidden", "true");
   const frame = document.createElement("iframe");
   frame.src = url;
   frame.title = "Tablight \u2014 search your tabs";
-  root.append(style, backdrop, glass, frame);
+  root.append(style, glass, frame);
   const close = () => {
     window.removeEventListener("message", message);
     host.remove();

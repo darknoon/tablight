@@ -37,6 +37,15 @@ try {
     context.serviceWorkers()[0] ||
     (await context.waitForEvent("serviceworker"));
   const id = new URL(worker.url()).host;
+  // Let the first-install options navigation finish before creating fixture tabs.
+  await wait(
+    () =>
+      Promise.resolve(
+        context.pages().some((p) => p.url().endsWith("/setup.html")),
+      ),
+    "first-install setup",
+  );
+
   await context.route("https://*.test/**", (route) => {
     const url = new URL(route.request().url());
     const titles = {
@@ -122,7 +131,15 @@ try {
   await shortcuts.close();
   await origin.locator("textarea").focus();
   await origin.locator("textarea").evaluate((e) => e.setSelectionRange(5, 10));
+  const outsideClip = { x: 0, y: 0, width: 160, height: 120 };
+  const outsideBefore = await origin.screenshot({ clip: outsideClip });
   let frame = await trigger();
+  assert.deepEqual(
+    await origin.screenshot({ clip: outsideClip }),
+    outsideBefore,
+  );
+  report("Page pixels outside the panel shadow remain unchanged");
+
   assert.equal(
     await frame.locator("#query").evaluate((e) => document.activeElement === e),
     true,

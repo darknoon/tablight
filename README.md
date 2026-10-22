@@ -22,7 +22,7 @@ The default shortcut is ⌘⇧Space on macOS and Ctrl⇧Space elsewhere. Chromiu
 - Shift+Return or ⌘Return forces a new URL or web search. A leading `?` excludes tab matches.
 - Escape dismisses the picker. Clicking outside the in-page overlay also dismisses it.
 
-Normal websites use a centered overlay with a frosted panel and a one-device-pixel hairline (dark appearance follows your system). The page outside the panel stays sharp and lightly dimmed. Reduced-transparency preferences disable the panel blur. Protected pages such as `chrome://extensions` use a small centered window. Selecting a result or pressing Escape closes that window.
+Normal websites use a centered overlay with a frosted panel and a one-device-pixel hairline (dark appearance follows your system). The page outside the panel stays sharp and undimmed; only the panel casts a drop shadow. Reduced-transparency preferences disable the panel blur. Protected pages such as `chrome://extensions` use a small centered window. Selecting a result or pressing Escape closes that window.
 
 Results include HTTP, HTTPS and file tabs in the same browser profile and browsing mode. Browser-owned pages, extension pages, Dia chat and placeholder WebUIs are excluded so the picker does not switch into internal browser surfaces. External sites such as ChatGPT are ordinary searchable tabs. Local file overlays require the browser's file-access permission; otherwise the window fallback is used.
 
@@ -60,3 +60,5 @@ npm run package
 The suite does not synthesize a physical macOS shortcut. The native extension-action binding was manually confirmed in Dia. Dia's custom command path delivered events without the page access needed for injection, and its programmatic action popup failed; this is why Tablight uses `_execute_action` and a real fallback window.
 
 Setup instructions open on first install and remain available from the extension’s Options menu. Reloads and updates do not reopen them.
+
+Selection uses the browser-provided system Highlight/HighlightText colors, not a fixed lavender. These are not Dia’s profile theme: no supported extension API to read that color has been identified.
