@@ -4,7 +4,7 @@
 
 Find an open tab, switch back to your last one, or start a search—all from your keyboard.
 
-![Tablight showing fictional tabs on a gray background](docs/screenshot.png)
+![Tablight showing site favicons, tab switching, web search, and Ask ChatGPT with fictional tabs](docs/screenshot.png)
 
 ## Install
 
@@ -21,5 +21,7 @@ Type to find a tab. **↑ / ↓** selects, **Return** opens, and **Escape** clos
 You can also open a URL, search with your default engine, or send a query to ChatGPT. Protected browser pages use a separate picker window.
 
 Tab matching stays on your device. No telemetry or account required. Queries leave the browser only when you choose a web search or ChatGPT.
+
+For troubleshooting, open **Options** → **Copy diagnostics**.
 
 [Privacy, permissions, and development](docs/technical.md)

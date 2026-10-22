@@ -8,6 +8,14 @@ let opening = false;
 export async function openPalette(tab) {
   if (opening) return;
   opening = true;
+  const diagnostic = { time: new Date().toISOString(), stage: "starting" };
+  const record = async (stage) => {
+    diagnostic.stage = stage;
+    await chrome.storage.session
+      .set({ lastInvocation: diagnostic })
+      .catch(() => {});
+  };
+  await record("starting");
   try {
     tab ||= (
       await chrome.tabs.query({ active: true, lastFocusedWindow: true })
@@ -33,7 +41,9 @@ export async function openPalette(tab) {
         func: mountOverlay,
         args: [`${own}palette.html?overlay=${token}`],
       });
+      await record("in-page panel");
     } catch {
+      await record("opening fallback window");
       // Browser-owned pages cannot host an overlay. Dia also rejects openPopup(),
       // so use a real, centered extension window and bind it to its source tab.
       const source = await chrome.windows.get(tab.windowId);
@@ -68,6 +78,7 @@ export async function openPalette(tab) {
         await chrome.tabs.update(paletteTab.id, {
           url: `${own}palette.html?window=${token}`,
         });
+        await record("fallback window");
       } catch (error) {
         await chrome.windows.remove(popup.id);
         throw error;

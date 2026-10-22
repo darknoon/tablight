@@ -12,6 +12,16 @@ function updateHairline() {
 }
 updateHairline();
 if (overlay) {
+  window.addEventListener("message", (event) => {
+    if (event.source !== parent || event.data?.type !== "tablight:viewport")
+      return;
+    const height = event.data.height;
+    if (Number.isFinite(height) && height > 0)
+      document.documentElement.style.setProperty(
+        "--available-height",
+        height + "px",
+      );
+  });
   const panel = document.querySelector("#panel");
   const syncGlass = () => {
     const { x, y, width, height } = panel.getBoundingClientRect();

@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import path from "node:path";
-import { mkdir, writeFile, mkdtemp } from "node:fs/promises";
+import { mkdir, writeFile, mkdtemp, readFile } from "node:fs/promises";
 const executablePath = process.env.CHROMIUM_PATH || chromium.executablePath();
 await mkdir("artifacts", { recursive: true });
 const context = await chromium.launchPersistentContext(
@@ -241,7 +241,21 @@ try {
   report("Arrow navigation selects explicit search or tab result");
   await dismiss(frame);
   await origin.emulateMedia({ colorScheme: "dark" });
+  await origin.addStyleTag({
+    content:
+      ":root { color-scheme: dark; } ::backdrop { background: magenta !important; backdrop-filter: blur(30px) !important; }",
+  });
+  const darkOutside = await origin.screenshot({ clip: outsideClip });
   frame = await trigger();
+  assert.deepEqual(await origin.screenshot({ clip: outsideClip }), darkOutside);
+  const overlayBounds = await frame
+    .frameElement()
+    .then((el) => el.boundingBox());
+  assert.ok(overlayBounds.width <= 680 && overlayBounds.height < 600);
+  report(
+    "Dark-mode picker stays panel-sized; page backdrop CSS cannot obscure the website",
+  );
+
   await frame.locator("#query").fill("");
   await origin.screenshot({
     path: "artifacts/palette-dark.png",
@@ -326,7 +340,7 @@ try {
   await dismiss(frame);
   // Outside click dismisses without navigating.
   frame = await trigger();
-  await frame.locator("body").click({ position: { x: 5, y: 5 } });
+  await origin.mouse.click(5, 5);
   await wait(() => origin.frames().length === 1, "outside dismissal");
   report("Clicking outside the palette dismisses it");
   // Explicit search submits only when Return is pressed, using the browser's engine.
@@ -609,6 +623,34 @@ try {
           .some((p) => p.url() === "chrome://extensions/shortcuts"),
       ),
     "setup opens shortcut editor",
+  );
+
+  const downloadReady = setup.waitForEvent("download");
+  await setup.locator("#download-debug").click();
+  const diagnosticDownload = await downloadReady;
+  const reportData = JSON.parse(
+    await readFile(await diagnosticDownload.path(), "utf8"),
+  );
+  assert.deepEqual(
+    Object.keys(reportData).sort(),
+    [
+      "version",
+      "browser",
+      "platform",
+      "pixelRatio",
+      "darkAppearance",
+      "shortcut",
+      "lastInvocation",
+    ].sort(),
+  );
+  assert.equal(
+    reportData.version,
+    await worker.evaluate(() => chrome.runtime.getManifest().version),
+  );
+  assert.ok(!JSON.stringify(reportData).includes("https://"));
+  assert.ok(!JSON.stringify(reportData).includes("a question & details"));
+  report(
+    "Options downloads a limited diagnostic report without tab URLs or queries",
   );
   await setup.screenshot({ path: "artifacts/setup.png" });
   report(

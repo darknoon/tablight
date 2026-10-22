@@ -28,14 +28,15 @@ body {
   padding: 0;
 }
 body.overlay {
-  width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: clamp(24px, 25vh, 230px) 20px 24px;
+  width: 100%;
+  min-height: 0;
   background: transparent;
+}
+body.overlay #panel {
+  box-shadow: none;
+}
+body.overlay #results {
+  max-height: min(400px, calc(var(--available-height, 520px) - 80px));
 }
 #panel {
   width: 680px;
@@ -222,9 +223,6 @@ button:focus-visible {
   }
   input {
     font-size: 17px;
-  }
-  body.overlay {
-    padding: 24px 10px;
   }
   .result {
     padding: 8px 6px;
